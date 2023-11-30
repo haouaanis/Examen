@@ -17,6 +17,20 @@ from umap import UMAP
 import numpy as np
 
 
+
+clavier = input("Please select one of the three methods : APC, TSNE, UMAP\n Press A for APC\n Press T for TSNE\n Press U for UMAP\n")
+if (clavier == 'A' or clavier == 'a'):
+  method = 'ACP'
+elif (clavier == 'T' or clavier == 't'):
+  method = 'TSNE'
+elif (clavier == 'U' or clavier == 'u'):
+  method = 'UMAP'
+else:
+  raise Exception("Please select one of the three methods : APC, AFC, UMAP")
+
+print("Vous avez choisi",clavier,", donc la méthode: ", method)
+
+
 def dim_red(mat, p, method):
     '''
     Perform dimensionality reduction
@@ -76,17 +90,21 @@ model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 embeddings = model.encode(corpus)
 
 # Perform dimensionality reduction and clustering for each method
-methods = ['ACP', 'TSNE', 'UMAP']
-for method in methods:
-    # Perform dimensionality reduction
-    red_emb = dim_red(embeddings, 20, method)
+#methods = ['ACP', 'TSNE', 'UMAP']
+#for method in methods:
 
-    # Perform clustering
-    pred = clust(red_emb, k)
 
-    # Evaluate clustering results
-    nmi_score = normalized_mutual_info_score(pred, labels)
-    ari_score = adjusted_rand_score(pred, labels)
+print("Clavier: ", clavier, " Method : ", method)
+    
+# Perform dimensionality reduction
+red_emb = dim_red(embeddings, 20, method)
 
-    # Print results
-    print(f'Method: {method}\nNMI: {nmi_score:.2f} \nARI: {ari_score:.2f}\n')
+# Perform clustering
+pred = clust(red_emb, k)
+
+# Evaluate clustering results
+nmi_score = normalized_mutual_info_score(pred, labels)
+ari_score = adjusted_rand_score(pred, labels)
+
+# Print results
+print(f'Method: {method}\nNMI: {nmi_score:.2f} \nARI: {ari_score:.2f}\n')
