@@ -15,6 +15,8 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from umap import UMAP
 import numpy as np
+import matplotlib.pyplot as plt
+
 
 
 
@@ -108,3 +110,20 @@ ari_score = adjusted_rand_score(pred, labels)
 
 # Print results
 print(f'Method: {method}\nNMI: {nmi_score:.2f} \nARI: {ari_score:.2f}\n')
+
+
+#Visualisation
+# Perform dimensionality reduction
+red_emb_3 = dim_red(embeddings, 3, method)  # Réduction à trois composantes
+
+# Plot the 3D representation
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+scatter = ax.scatter(red_emb_3[:, 0], red_emb_3[:, 1], red_emb_3[:, 2], c=labels, cmap='viridis')  # Coloré par les labels
+
+# Ajouter une légende pour les couleurs
+legend = ax.legend(*scatter.legend_elements(), title="Classes")
+ax.add_artist(legend)
+
+ax.set_title(f'{method} - 3D representation')
+plt.show()
