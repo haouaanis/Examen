@@ -13,9 +13,9 @@ from sklearn.metrics.cluster import normalized_mutual_info_score, adjusted_rand_
 from sentence_transformers import SentenceTransformer
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
+from umap import UMAP
 import numpy as np
 
-main
 
 def dim_red(mat, p, method):
     '''
@@ -32,10 +32,8 @@ def dim_red(mat, p, method):
     if method=='ACP':
         red_mat = mat[:,:p]
         pca = PCA(n_components=p)
-        red_mat = pca.fit_transform(mat) 
-    elif method=='AFC':
-        red_mat = mat[:,:p]
-        
+        red_mat = pca.fit_transform(red_mat) 
+       
     elif method=='TSNE':
         red_mat = mat[:,:p]
         tsne = TSNE(n_components=p, method='exact')
@@ -43,7 +41,8 @@ def dim_red(mat, p, method):
         
     elif method=='UMAP':
         red_mat = mat[:,:p]
-        
+        umap = UMAP(n_components=p)
+        red_mat = umap.fit_transform(red_mat)        
     else:
         raise Exception("Please select one of the three methods : APC, AFC, UMAP")
     
@@ -62,7 +61,6 @@ def clust(mat, k):
     ------
         pred : list of predicted labels
     '''
- 
     pred = np.random.randint(k, size=len(corpus))
     
     return pred
@@ -78,7 +76,6 @@ model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 embeddings = model.encode(corpus)
 
 # Perform dimensionality reduction and clustering for each method
-
 methods = ['ACP', 'TSNE', 'UMAP']
 for method in methods:
     # Perform dimensionality reduction
