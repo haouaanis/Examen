@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 """main
 
@@ -24,24 +25,26 @@ def dim_red(mat, p, method):
 
     Input:
     -----
-        mat : NxM list
-        p : number of dimensions to keep
+        mat : NxM list 
+        p : number of dimensions to keep 
     Output:
     ------
         red_mat : NxP list such that p<<m
     '''
     if method=='ACP':
         red_mat = mat[:,:p]
-
-    elif method=='AFC':
+        
+    elif method=='TSNE':
         red_mat = mat[:,:p]
-
+        tsne = TSNE(n_components=p, method='exact')
+        red_mat = tsne.fit_transform(red_mat)
+        
     elif method=='UMAP':
         red_mat = mat[:,:p]
-
+        
     else:
         raise Exception("Please select one of the three methods : APC, AFC, UMAP")
-
+    
     return red_mat
 
 
@@ -51,15 +54,15 @@ def clust(mat, k):
 
     Input:
     -----
-        mat : input list
+        mat : input list 
         k : number of cluster
     Output:
     ------
         pred : list of predicted labels
     '''
-
+    
     pred = np.random.randint(k, size=len(corpus))
-
+    
     return pred
 
 # import data
@@ -73,7 +76,7 @@ model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 embeddings = model.encode(corpus)
 
 # Perform dimensionality reduction and clustering for each method
-methods = ['ACP', 'AFC', 'UMAP']
+methods = ['ACP', 'TSNE', 'UMAP']
 for method in methods:
     # Perform dimensionality reduction
     red_emb = dim_red(embeddings, 20, method)
@@ -87,4 +90,3 @@ for method in methods:
 
     # Print results
     print(f'Method: {method}\nNMI: {nmi_score:.2f} \nARI: {ari_score:.2f}\n')
-
