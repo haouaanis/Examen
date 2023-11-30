@@ -62,7 +62,7 @@ model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 embeddings = model.encode(corpus)
 
 # Perform dimensionality reduction and clustering for each method
-methods = ['ACP', 'AFC', 'UMAP']
+methods = ['ACP', 'TSNE', 'UMAP']
 for method in methods:
     # Perform dimensionality reduction
     red_emb = dim_red(embeddings, 20, method)
